@@ -1,25 +1,24 @@
-#Setting Pivot as last Element
-
-def quick_sort(arr,left,right):
+def quickSort(arr,left,right):
     if left < right:
-        partition_pos = partition(arr,left,right)
-        quick_sort(arr,left,partition_pos-1)
-        quick_sort(arr,partition_pos+1,right)
-
-def partition(arr,left,right):
-    i=0
-    j=right-1
-    pivot=arr[right]
-
-    while i < j:
-        while arr[i] < arr[right]:
-            i+=1
-        while arr[j] > arr[right]:
-            j-=1
-    if arr[i]>arr[right]:
-        arr[i],arr[right]=arr[right],arr[i]
-    return i
-
-arr = [1,4,3,2,6,8]
-quick_sort(arr,0,len(arr)-1)
+        mid = (left+right)//2
+        pivot=arr[mid]
+        index=partition(arr,left,right,pivot)
+        quickSort(arr,left,index-1)
+        quickSort(arr,index,right)
+        
+def partition(arr,left,right,pivot):
+    while left <= right :
+        while arr[left] < pivot:
+            left+=1
+        while arr[right]>pivot:
+            right-=1
+        
+        if left <= right:
+            arr[left],arr[right]=arr[right],arr[left]
+            left+=1
+            right-=1
+    return left
+    
+arr = [34,56,23,12,57,87,23,54,21,76]
+quickSort(arr,0,len(arr)-1)
 print(arr)
