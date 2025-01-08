@@ -14,7 +14,7 @@ class Solution(object):
                 count+=1
                 i-=1
             i+=1
-        for i in range(count):
+        for _ in range(count):
             nums.append(0)
         return nums
     
@@ -35,20 +35,17 @@ class Solution(object):
         j=-1
         while i < len(nums):
             if nums[i] != 0:
-                i+=1
-            elif nums[i] == 0:
-                j=i
-                i=i+1
+                i += 1
+            else:
+                j = i + 1
                 break
         if j==-1:
             return nums
         while i < len(nums):
             if nums[i] != 0:
                 nums[j],nums[i]=nums[i],nums[j]
-                i+=1
                 j+=1
-            else:
-                i+=1
+            i+=1
         return nums
     
 #time complexity is O(n)
