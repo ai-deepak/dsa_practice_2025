@@ -16,13 +16,10 @@ print(numdict)
 y=0
 i=0
 while y < len(nums):
-    if i in numdict:
-        if numdict[i]:
+    if i in numdict and numdict[i]:
             nums[y]=i
             y+=1
             numdict[i]-=1
-        else:
-            i+=1
     else:
         i+=1
 
