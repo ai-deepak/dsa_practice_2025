@@ -8,7 +8,7 @@
 
 arr = [5, 4, 3, 1, 6] 
 
-for i in range(0,len(arr)):
+for i in range(len(arr)):
     for y in range(i+2,len(arr)+1):
         print(arr[i:y])
 
@@ -28,7 +28,7 @@ for i in range(0,len(arr)):
 # and we need to return the largest sum of it
 
 # if i continued with the above code, the time complexity would have been O(N^3).
-# but when i looked at the output. I saw a pattern, let me arrange the output with smallest and second smallest.
+# but when i looked at the output. I saw a pattern, let me arrange the output in different way.
 
 # This is the output
 # array with 2 elements
