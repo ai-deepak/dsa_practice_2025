@@ -896,3 +896,235 @@ print(person.search_string)  # Outputs: Alice - 30
 1. **Use `object.__setattr__`**: Allows controlled modification in `__post_init__`.
 2. **Avoid `frozen=True`**: If you need to frequently update attributes, stick with the default mutable behavior.
 3. **Combine with `@property`**: Use `frozen=True` for immutability but provide controlled access to derived attributes via properties.
+
+---
+
+### PROPERTY CONCEPT
+
+Here’s a detailed example implementing your request. It includes the `VideoClip` class with a `duration` property (including a setter), the `VideoProject` class with a `total_length` property, and a main function to demonstrate the functionality.
+
+### Code Example:
+
+```python
+from dataclasses import dataclass, field
+from typing import List
+
+
+@dataclass
+class VideoClip:
+    title: str
+    minutes: int
+    seconds: int
+
+    @property
+    def duration(self) -> int:
+        """
+        Get the duration of the video clip in seconds.
+        """
+        return self.minutes * 60 + self.seconds
+
+    @duration.setter
+    def duration(self, total_seconds: int):
+        """
+        Set the duration of the video clip, updating minutes and seconds.
+        """
+        self.minutes = total_seconds // 60
+        self.seconds = total_seconds % 60
+
+
+@dataclass
+class VideoProject:
+    title: str
+    clips: List[VideoClip] = field(default_factory=list)
+
+    @property
+    def total_length(self) -> int:
+        """
+        Get the total length of all video clips in the project in seconds.
+        """
+        return sum(clip.duration for clip in self.clips)
+
+    def add_clip(self, clip: VideoClip):
+        """
+        Add a new clip to the project.
+        """
+        self.clips.append(clip)
+
+
+# Main function
+def main():
+    # Create VideoClip instances
+    clip1 = VideoClip(title="Clip 1", minutes=2, seconds=30)
+    clip2 = VideoClip(title="Clip 2", minutes=3, seconds=45)
+
+    # Create VideoProject and add clips
+    project = VideoProject(title="My Video Project")
+    project.add_clip(clip1)
+    project.add_clip(clip2)
+
+    # Print total length before using duration setter
+    print(f"Total Length Before Update: {project.total_length} seconds")
+
+    # Update duration of clip1 using the setter
+    clip1.duration = 300  # 5 minutes
+
+    # Print total length after using duration setter
+    print(f"Total Length After Update: {project.total_length} seconds")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+---
+
+### Explanation:
+
+1. **`VideoClip` Class**:
+
+   - **Attributes**:
+     - `title`: Title of the clip.
+     - `minutes`: Duration in minutes.
+     - `seconds`: Duration in seconds.
+   - **`duration` Property**:
+     - **Getter**: Converts `minutes` and `seconds` into total seconds.
+     - **Setter**: Updates `minutes` and `seconds` based on the total seconds provided.
+
+2. **`VideoProject` Class**:
+
+   - **Attributes**:
+     - `title`: Title of the video project.
+     - `clips`: A list of `VideoClip` objects.
+   - **`total_length` Property**:
+     - Calculates the total length of all clips in the project in seconds by summing up the `duration` of each clip.
+
+3. **Main Function**:
+   - Creates two `VideoClip` objects (`clip1` and `clip2`).
+   - Combines them into a `VideoProject`.
+   - Prints the total length of the project before and after modifying `clip1`'s duration using the setter.
+
+---
+
+### Output:
+
+```plaintext
+Total Length Before Update: 375 seconds
+Total Length After Update: 645 seconds
+```
+
+---
+
+### Key Points:
+
+1. **Property Usage**:
+
+   - The `duration` property allows clean encapsulation for handling duration in seconds while storing the data as `minutes` and `seconds`.
+   - The setter ensures that changes to the duration are consistently reflected in both `minutes` and `seconds`.
+
+2. **Dynamic Updates**:
+   - Changes to individual clip durations dynamically affect the total length of the `VideoProject` due to the `total_length` property.
+
+This implementation demonstrates clean and modular use of `property` with data classes, providing a flexible and clear way to manage video projects and their durations.
+
+---
+
+### Difference Between `str` and `repr` in Python
+
+The difference between `str` and `repr` in Python lies in their intended purpose and the way they represent objects.
+
+### **1. Purpose**
+
+- **`str`**: Provides a **user-friendly** string representation of an object. It is designed to be more readable and used for display to end-users.
+- **`repr`**: Provides an **unambiguous** and often **developer-oriented** string representation of an object. It is meant to be as informative as possible and is usually used for debugging.
+
+---
+
+### **2. Implementation**
+
+- You can define custom `__str__` and `__repr__` methods in your class to control their behavior.
+- If `__str__` is not implemented, Python will fall back to `__repr__` for `str()` calls.
+
+---
+
+### **3. Example**
+
+```python
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __str__(self):
+        # User-friendly representation
+        return f"Point({self.x}, {self.y})"
+
+    def __repr__(self):
+        # Unambiguous representation
+        return f"Point(x={self.x}, y={self.y})"
+
+# Create an instance
+p = Point(3, 4)
+
+# Display representations
+print(str(p))   # Calls __str__: Point(3, 4)
+print(repr(p))  # Calls __repr__: Point(x=3, y=4)
+```
+
+---
+
+### **4. Key Differences**
+
+| **Aspect**   | **`str`**                      | **`repr`**                             |
+| ------------ | ------------------------------ | -------------------------------------- |
+| **Purpose**  | Readable, user-friendly output | Unambiguous, developer-oriented output |
+| **Audience** | End-users                      | Developers                             |
+| **Fallback** | Falls back to `__repr__`       | Does not fall back to `__str__`        |
+| **Usage**    | `print()` or `str()`           | Debugging or `repr()` function         |
+
+---
+
+### **5. Example with Built-in Types**
+
+```python
+# Example with integers
+num = 42
+print(str(num))   # '42' (Readable for users)
+print(repr(num))  # '42' (Same for simple types)
+
+# Example with strings
+text = "Hello\nWorld"
+print(str(text))   # 'Hello\nWorld'
+print(repr(text))  # "'Hello\\nWorld'" (Unambiguous, includes escape characters)
+```
+
+---
+
+### **6. When to Use**
+
+- Use **`str`** when you want a **human-readable description** of an object (e.g., in user interfaces or reports).
+- Use **`repr`** for **debugging and logging**, where the representation should clearly indicate what the object is, often including type information.
+
+---
+
+### **7. Practical Example**
+
+```python
+from datetime import datetime
+
+now = datetime.now()
+
+print(str(now))   # Human-readable: '2025-01-13 10:15:30.123456'
+print(repr(now))  # Technical: 'datetime.datetime(2025, 1, 13, 10, 15, 30, 123456)'
+```
+
+In this case:
+
+- `str()` is designed for readability.
+- `repr()` is designed to give all details necessary to recreate the object.
+
+---
+
+### **Summary**
+
+- Use `str` for user-facing string representations.
+- Use `repr` for debugging, logging, or when you need an exact representation of the object.
