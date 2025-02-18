@@ -29,3 +29,40 @@ class Solution:
                 break
         return [floor,ceiling]
 
+#also tried an O(n logn) solution (myself)
+
+class Solution:
+    def getFloorAndCeil(self, x: int, arr: list) -> list:
+        # code here
+        def func(arr,x):
+            arr.sort()
+            n=len(arr)
+            low=0
+            high=n-1
+            floor=-1
+            ceil=-1
+            floordiff=float('inf')
+            ceildiff=float('inf')
+            while low<=high:
+                mid=(low+high)//2
+                if arr[mid]==x:
+                    floor=ceil=arr[mid]
+                    return [floor,ceil]
+                elif arr[mid]<=x:
+                    fdiff=x-arr[mid]
+                    if fdiff < floordiff:
+                        floor=arr[mid]
+                        floordiff=fdiff
+                    low=mid+1
+                else:
+                    cdiff=arr[mid]-x
+                    if cdiff < ceildiff:
+                        ceil=arr[mid]
+                        ceildiff=cdiff
+                    high=mid-1
+            
+            return [floor,ceil]
+        
+        return func(arr,x)
+
+
