@@ -1,16 +1,14 @@
+import asyncio
+
 import requests
-import aiohttp
-from typing import Any, Dict
 
-JSONObject = Dict[str, Any]
+JSON = int | str | float | bool | None | dict[str, "JSON"] | list["JSON"]
+JSONObject = dict[str, JSON]
+JSONList = list[JSON]
 
-async def http_get(url: str) -> dict:
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            response.raise_for_status()
-            return await response.json()
-
-def http_get_sync(url: str) -> dict:
+def http_get_sync(url: str) -> JSONObject:
     response = requests.get(url)
-    response.raise_for_status()
     return response.json()
+
+async def http_get(url: str) -> JSONObject:
+    return await asyncio.to_thread(http_get_sync, url)
