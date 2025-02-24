@@ -43,7 +43,6 @@ class Solution:
         x = n
         while x * x > n:
             x = (x + n // x) // 2  # Integer division to keep floor value
-            
         return x
     
 
