@@ -1,4 +1,3 @@
-````md
 # Understanding Functions and Higher-Order Functions in Python
 
 ## Introduction
@@ -45,7 +44,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 ```
-````
 
 ### Explanation:
 
