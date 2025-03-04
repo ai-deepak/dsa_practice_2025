@@ -1,7 +1,11 @@
 #spoj
-#aggressive
-
+#aggressive cows
 #https://www.spoj.com/problems/AGGRCOW/
+
+#geeksforgeeks
+#https://www.geeksforgeeks.org/problems/aggressive-cows/0
+
+
 #for question understanding watch striver video
 #https://www.youtube.com/watch?v=R_Mfw4ew-Vo
 

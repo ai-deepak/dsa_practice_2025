@@ -36,3 +36,5 @@ def kthmissing(arr,k):
     return arr[high] + (k- missingCount(arr,high))
 
 print(kthmissing(arr,k))
+
+
