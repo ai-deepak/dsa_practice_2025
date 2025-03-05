@@ -1,14 +1,5 @@
 from typing import Generator
 
-#example from python documentation
-def echo_round() -> Generator[int, float, str]:
-    res = yield
-    while res:
-        res = yield round(res)
-    return "OK"
-
-
-
 def simple_generator() -> Generator[str,None,None]:
     generator_str = "Hello World"
     yield generator_str
